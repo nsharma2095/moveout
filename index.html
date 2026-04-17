@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoveOut — Give your furniture a better home</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FEFCF7;
+    --terracotta: #C4623A;
+    --terracotta-light: #E8846A;
+    --terracotta-pale: #F9EDE8;
+    --forest: #2D4A3E;
+    --forest-light: #4A7266;
+    --sand: #D4C4A0;
+    --sand-dark: #A89870;
+    --ink: #1A1A14;
+    --ink-soft: #3D3D30;
+    --muted: #8A8070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* Nav */
+  nav {
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--forest);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span {
+    color: var(--terracotta);
+  }
+
+  .nav-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--sand);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  /* Hero */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 40px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 80px;
+    align-items: start;
+    position: relative;
+  }
+
+  .hero-left { position: relative; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 24px;
+  }
+
+  .eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -1.5px;
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 480px;
+    margin-bottom: 40px;
+  }
+
+  /* How it works pills */
+  .how-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .how-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--warm-white);
+    border: 1px solid var(--sand);
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .how-pill:nth-child(1) { animation-delay: 0.2s; }
+  .how-pill:nth-child(2) { animation-delay: 0.3s; }
+  .how-pill:nth-child(3) { animation-delay: 0.4s; }
+
+  .how-pill-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Stats */
+  .stats-row {
+    display: flex;
+    gap: 32px;
+  }
+
+  .stat { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--forest);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .stat-divider {
+    width: 1px;
+    background: var(--sand);
+    align-self: stretch;
+  }
+
+  /* Form card */
+  .form-card {
+    background: var(--warm-white);
+    border: 1px solid var(--sand);
+    border-radius: 24px;
+    padding: 36px 32px;
+    position: sticky;
+    top: 40px;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+
+  .form-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .form-card-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--sand);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--terracotta);
+    background: var(--warm-white);
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--sand-dark); }
+
+  textarea { resize: none; height: 72px; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.01em;
+  }
+
+  .submit-btn:hover { background: #B05530; }
+  .submit-btn:active { transform: scale(0.98); }
+
+  .form-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* Success state */
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 16px 0;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: #EAF3DE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .success-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--forest);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .success-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 280px;
+    margin: 0 auto 20px;
+  }
+
+  .launch-badge {
+    display: inline-block;
+    background: var(--terracotta-pale);
+    color: var(--terracotta);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid #E8C4B8;
+  }
+
+  .share-prompt {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--sand);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .share-prompt strong {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .share-btn:hover { background: #1da851; }
+
+  /* Social proof strip */
+  .proof-strip {
+    max-width: 1100px;
+    margin: 60px auto 0;
+    padding: 0 40px 80px;
+  }
+
+  .proof-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .proof-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .proof-card {
+    background: var(--warm-white);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    padding: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .proof-card:nth-child(1) { animation-delay: 0.3s; }
+  .proof-card:nth-child(2) { animation-delay: 0.4s; }
+  .proof-card:nth-child(3) { animation-delay: 0.5s; }
+
+  .proof-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+
+  .proof-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .proof-card-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Decorative blob */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 {
+    width: 400px; height: 400px;
+    background: rgba(196, 98, 58, 0.08);
+    top: -100px; right: -100px;
+  }
+  .blob-2 {
+    width: 300px; height: 300px;
+    background: rgba(45, 74, 62, 0.07);
+    bottom: -50px; left: 200px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 20px; }
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 40px 20px 20px;
+      gap: 40px;
+    }
+    .form-card { position: static; }
+    .proof-cards { grid-template-columns: 1fr; }
+    .proof-strip { padding: 0 20px 60px; }
+    .stats-row { gap: 20px; }
+    h1 { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<nav>
+  <div class="logo">Move<span>Out</span></div>
+  <div class="nav-tag">Bengaluru · Launching Soon</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">
+      <div class="eyebrow-dot"></div>
+      Donate · Recycle · Free pickup · Bengaluru
+    </div>
+
+    <h1>Your old sofa<br>deserves a<br><em>better ending.</em></h1>
+
+    <p class="hero-sub">Moving out? We pick up your old furniture for free — usable items go to verified NGOs, broken items get responsibly recycled. No haggling, no strangers, no dumping.</p>
+
+    <div class="how-row">
+      <div class="how-pill">
+        <div class="how-pill-num">1</div>
+        Tell us what you have
+      </div>
+      <div class="how-pill">
+        <div class="how-pill-num">2</div>
+        We schedule a free pickup
+      </div>
+      <div class="how-pill">
+        <div class="how-pill-num">3</div>
+        NGO or recycler receives it
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num">Free</div>
+        <div class="stat-label">Always, for donors</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num">80G</div>
+        <div class="stat-label">Tax certificate included</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num">48hrs</div>
+        <div class="stat-label">Pickup turnaround</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form card -->
+  <div class="form-card" id="formCard">
+
+    <div id="formState">
+      <div class="form-card-title">Join the waitlist</div>
+      <div class="form-card-sub">Launching in Bengaluru soon. Reserve your free pickup slot — donate, recycle, or both.</div>
+
+      <div class="form-group">
+        <label>Your name</label>
+        <input type="text" id="fieldName" placeholder="Priya Sharma" />
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp number</label>
+        <input type="tel" id="fieldPhone" placeholder="+91 98765 43210" />
+      </div>
+
+      <div class="form-group">
+        <label>Society / apartment name</label>
+        <input type="text" id="fieldSociety" placeholder="Prestige Lakeside, Koramangala" />
+      </div>
+
+      <div class="form-group">
+        <label>When are you moving?</label>
+        <select id="fieldDate">
+          <option value="" disabled selected>Select a timeframe</option>
+          <option>Within 2 weeks</option>
+          <option>Within 1 month</option>
+          <option>In 2–3 months</option>
+          <option>Just exploring for now</option>
+        </select>
+      </div>
+
+      <!-- Donate section -->
+      <div style="border:1px solid #C0DD97; border-radius:10px; padding:12px 14px; margin-bottom:12px; background:#EAF3DE22;">
+        <div style="font-size:12px; font-weight:500; color:#27500A; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <span style="width:18px;height:18px;border-radius:50%;background:#1D9E75;color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;">✓</span>
+          Donate — items in usable condition
+        </div>
+        <label style="color:#3B6D11;">Items to donate (sofa, bed, wardrobe, table…)</label>
+        <textarea id="fieldDonate" placeholder="e.g. 3-seater sofa, wooden wardrobe, dining table with 4 chairs..." style="border-color:#C0DD97; background:#fff;"></textarea>
+      </div>
+
+      <!-- Recycle section -->
+      <div style="border:1px solid #FAC775; border-radius:10px; padding:12px 14px; margin-bottom:12px; background:#FAEEDA22;">
+        <div style="font-size:12px; font-weight:500; color:#633806; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <span style="width:18px;height:18px;border-radius:50%;background:#BA7517;color:#fff;font-size:10px;display:inline-flex;align-items:center;justify-content:center;">↻</span>
+          Recycle — broken or unusable items
+        </div>
+        <label style="color:#854F0B;">Items to recycle (broken appliances, metal, e-waste…)</label>
+        <textarea id="fieldRecycle" placeholder="e.g. broken washing machine, old AC, damaged metal bed frame..." style="border-color:#FAC775; background:#fff;"></textarea>
+      </div>
+
+      <!-- Sell interest fake door -->
+      <div style="display:flex; align-items:flex-start; gap:10px; background:var(--color-background-secondary); border-radius:10px; padding:11px 13px; margin-bottom:14px; border:1px solid var(--sand);">
+        <input type="checkbox" id="fieldSell" style="width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:#C4623A;" />
+        <label for="fieldSell" style="font-size:12px; color:var(--color-text-secondary); cursor:pointer; margin:0; line-height:1.5;">
+          <strong style="color:var(--ink-soft); font-size:13px;">I'd also like to sell some items for money</strong><br>
+          <span style="font-size:11px; color:var(--muted);">Coming soon — tick to be first in line when we launch this feature</span>
+        </label>
+      </div>
+
+      <button class="submit-btn" onclick="handleSubmit()">Reserve my free pickup →</button>
+
+      <div class="form-note">
+        100% free for donors · No spam · We'll WhatsApp you personally
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2D4A3E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="success-title">You're on the list!</div>
+      <div class="success-sub">We'll personally WhatsApp you as soon as we launch in your area. Won't be long.</div>
+      <div class="launch-badge">Launching in Bengaluru · May 2026</div>
+
+      <div class="share-prompt">
+        <strong>Know someone else moving out?</strong>
+        <button class="share-btn" onclick="shareWA()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.795.473 3.476 1.28 4.934L2 22l5.233-1.263A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="none" stroke="white" stroke-width="1.5"/></svg>
+          Share on WhatsApp
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Why it works section -->
+<div class="proof-strip">
+  <div class="proof-label">Why MoveOut exists</div>
+  <div class="proof-cards">
+    <div class="proof-card">
+      <div class="proof-icon" style="background:#F9EDE8;">🛋️</div>
+      <div class="proof-card-title">OLX doesn't work for furniture</div>
+      <div class="proof-card-body">You get lowball offers, no-shows, and strangers at your door. Most people give up and dump it.</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-icon" style="background:#EAF3DE;">🤝</div>
+      <div class="proof-card-title">NGOs and recyclers both covered</div>
+      <div class="proof-card-body">Good items go to shelters and families in need. Broken items go to verified recyclers — nothing ends up in a landfill.</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-icon" style="background:#E6F1FB;">📄</div>
+      <div class="proof-card-title">80G cert for donations, zero guilt for recycling</div>
+      <div class="proof-card-body">Donated items come with a verified 80G tax certificate. Recycled items are disposed responsibly — with a confirmation photo.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function handleSubmit() {
+  const name = document.getElementById('fieldName').value.trim();
+  const phone = document.getElementById('fieldPhone').value.trim();
+  const society = document.getElementById('fieldSociety').value.trim();
+  
+  const date = document.getElementById('fieldDate').value;
+
+  const donate = document.getElementById('fieldDonate').value.trim();
+  const recycle = document.getElementById('fieldRecycle').value.trim();
+  const wantsSell = document.getElementById('fieldSell').checked;
+
+  if (!name || !phone || !date || (!donate && !recycle)) {
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = 'Please fill all fields';
+    btn.style.background = '#BA7517';
+    setTimeout(() => {
+      btn.textContent = 'Reserve my free pickup →';
+      btn.style.background = '';
+    }, 2000);
+    return;
+  }
+
+  // In real version: POST to Google Sheets via Apps Script or Airtable API
+  // For now, log to console as placeholder
+  fetch('https://script.google.com/macros/s/AKfycbyvKwoLGtiRTEc481yitfXmjbjE0vQi0yQGyDDYrFULhH9G4F1zdBoPeZA7NDfF0mIqtQ/exec', {
+  method: 'POST',
+  body: JSON.stringify({
+    name, phone, society, date,
+    donate, recycle, wantsSell
+  })
+});
+
+  document.getElementById('formState').style.display = 'none';
+  const success = document.getElementById('successState');
+  success.style.display = 'block';
+}
+
+function shareWA() {
+  const text = encodeURIComponent("Moving out soon? MoveOut picks up your old furniture FREE — donate usable items to an NGO or recycle broken ones responsibly. 80G certificate included. Check it out: [your-link-here]");
+  window.open('https://wa.me/?text=' + text, '_blank');
+}
+</script>
+
+</body>
+</html>
